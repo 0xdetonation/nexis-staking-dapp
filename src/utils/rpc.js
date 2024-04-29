@@ -1,0 +1,1 @@
+export const rpc = "https://evm-testnet.nexis.network";
