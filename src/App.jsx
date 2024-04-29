@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { createAccount } from './utils/create'
-import { getAccountInfo } from './utils/account/info';
+import { getAccountStakes, getBalance } from './utils/account/info';
 import { NEXIS_LOGGED_IN_MNEMONIC } from './utils/lsIdents';
 import { getVoteAccounts } from './utils/getVoteAccounts';
 
@@ -32,7 +32,6 @@ useEffect(()=>{
   const fetchVoteAccounts = async()=>{
     const _voteAccounts = await getVoteAccounts();
     setVoteAccounts(_voteAccounts.current);
-    console.log(_voteAccounts.current)
   }
   fetchVoteAccounts();
 },[])
@@ -52,7 +51,7 @@ useEffect(()=>{
 
   useEffect(()=>{
     const fetchBalance = async()=>{
-      const {balance} = await getAccountInfo(generatedCredentials.publicKey);
+      const {balance} = await getBalance(generatedCredentials.publicKey);
       setAccountBalance(balance + " NZT");
     }
     if(generatedCredentials){
@@ -98,8 +97,7 @@ useEffect(()=>{
           )
         })}
       </>}
-  
-
+      <button onClick={()=>getAccountStakes()}>getAccountStakes</button>
       </>}
     </div>
   )
