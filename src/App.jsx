@@ -3,6 +3,7 @@ import { createAccount } from './utils/create'
 import { getAccountStakes, getBalance } from './utils/account/info';
 import { NEXIS_LOGGED_IN_MNEMONIC } from './utils/lsIdents';
 import { getVoteAccounts } from './utils/getVoteAccounts';
+import { deactivate } from './utils/account/withdraw';
 
 function App() {
   const [loggedIn,setLoggedIn]= useState(false);
@@ -18,7 +19,6 @@ function App() {
             const storedMnemonic = localStorage.getItem(NEXIS_LOGGED_IN_MNEMONIC);
             if (storedMnemonic) {
                 setLoggedIn(true);
-                console.log(storedMnemonic);
                 setGeneratatedCredentials(JSON.parse(storedMnemonic));
             }
         } catch (error) {
@@ -31,7 +31,8 @@ function App() {
 useEffect(()=>{
   const fetchVoteAccounts = async()=>{
     const _voteAccounts = await getVoteAccounts();
-    setVoteAccounts(_voteAccounts.current);
+    const { current, delinquent } = _voteAccounts;
+    setVoteAccounts(current.concat(delinquent));
   }
   fetchVoteAccounts();
 },[])
@@ -98,6 +99,7 @@ useEffect(()=>{
         })}
       </>}
       <button onClick={()=>getAccountStakes()}>getAccountStakes</button>
+      <button onClick={()=>deactivate("7LNj3XtZKsA7eNMa7CD4FpBoUVfyKbBngdiXYzYhTCLm")}>deactivate</button>
       </>}
     </div>
   )
