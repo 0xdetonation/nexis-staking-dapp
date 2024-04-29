@@ -1,14 +1,11 @@
 import { PublicKey, StakeProgram, sendAndConfirmTransaction } from "@velas/web3";
-import { NEXIS_LOGGED_IN_MNEMONIC } from "../lsIdents";
-import { getKeyPairFromSecretKey } from "../keyPair";
 import { getConnection } from "../connection";
+import { getStoredWallet } from "../account/getStoredAccount";
 
 export const deactivate = async(stakeAccount)=>{
-    const storedAccount = await localStorage.getItem(NEXIS_LOGGED_IN_MNEMONIC);
-    const wallet = getKeyPairFromSecretKey(JSON.parse(storedAccount).secretKey);
-    // At anytime we can choose to deactivate our stake. Our stake account must be inactive before we can withdraw funds.
+const wallet = await getStoredWallet();
 const deactivateTx = StakeProgram.deactivate({
-    stakePubkey: new PublicKey(stakeAccount),
+    stakePubkey: stakeAccount.publicKey,
     authorizedPubkey:  wallet.publicKey,
   });
   const deactivateTxId = await sendAndConfirmTransaction(
