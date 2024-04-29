@@ -3,34 +3,61 @@ import { decode } from "bs58";
 import { getKeyPairFromSecretKey } from "./keyPair";
 import { getConnection } from "./connection";
 
-export const delegate = async () => {
-    const pk = "31efhNrUAxzJy3GP6RESzzeztAToRo8FEWXiTZxXSXnats9CXBLZytfdg1bGZLkD86zhXX32ehiYJuX4zEXKsNi";
-    const keypair = getKeyPairFromSecretKey(pk);
+let sk=undefined;
+//amount to stake and public address of validator
+export const delegate = async (amount,voteAddress) => {
     const connection = getConnection();
-    const { blockhash } = await connection.getRecentBlockhash();
 
-    const createAndInitialize = StakeProgram.createAccount({
-        fromPubkey: keypair.publicKey,
-        authorized: new Authorized(keypair.publicKey),
-        lockup: new Lockup(0, 0, new PublicKey(0)),
-        lamports: 2000000,
-    });
+    const storedAccount = await localStorage.getItem(NEXIS_LOGGED_IN_MNEMONIC);
 
-    const transaction = new Transaction().add(createAndInitialize);
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = keypair.publicKey;
-    transaction.sign(keypair,keypair);
-    await connection.sendTransaction(transaction, [keypair,keypair]);
+    // will fetch this from local storage ok
+    const walletKeyPair= getKeyPairFromSecretKey((JSON.parse(storedAccount)).secretKey)
 
-    const delegation = StakeProgram.delegate({
-        stakePubkey: keypair.publicKey,
-        authorizedPubkey: keypair.publicKey,
-        votePubkey: new PublicKey("Bbg2muexVXbVKjZueXS9dWpx2jMG47jUKajL5ok5PqN9")
-    });
-    const delegationTx = new Transaction().add(delegation);
-    delegationTx.recentBlockhash = blockhash;
-    delegationTx.feePayer = keypair.publicKey;
-    delegationTx.sign(keypair,keypair);
-
-    await connection.sendTransaction(delegationTx, [keypair,keypair]);
+    let stakeAccount = Keypair.generate(); //generating a stake account
+    if(sk==undefined){
+        sk = (stakeAccount.secretKey)
+        
+        // create stake account
+        let createStakeAccountInstruction = StakeProgram.createAccount({
+        fromPubkey: walletKeyPair.publicKey,
+        stakePubkey: stakeAccount.publicKey,
+        authorized: new Authorized(walletKeyPair.publicKey, walletKeyPair.publicKey),
+        lamports: LAMPORTS_PER_SOL * amount,
+        });
+    
+        let createStakeAccountTransaction = new Transaction().add(createStakeAccountInstruction);
+        createStakeAccountTransaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
+    
+        createStakeAccountTransaction.feePayer = walletKeyPair.publicKey;
+        createStakeAccountTransaction.partialSign(stakeAccount);
+        try {
+            createStakeAccountTransaction = await sendAndConfirmTransaction(
+                connection,
+                createStakeAccountTransaction,
+                [walletKeyPair, stakeAccount],
+            );
+        } catch (error) {
+            console.log(error)
+        }
+    }else{
+            stakeAccount = Keypair.fromSecretKey(sk);
+        
+            const votePubkey = new PublicKey(voteAddress)
+            let delegateInstruction = StakeProgram.delegate({
+            stakePubkey: stakeAccount.publicKey,
+            authorizedPubkey: walletKeyPair.publicKey,
+            votePubkey,
+            });
+        
+            let delegateTransaction = new Transaction().add(delegateInstruction);
+            delegateTransaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
+            delegateTransaction.feePayer = walletKeyPair.publicKey;
+            delegateTransaction.sign(walletKeyPair);
+    
+            delegateTransaction = await sendAndConfirmTransaction(
+            connection,
+            delegateTransaction,
+            [walletKeyPair],
+            );
+    }
 };
