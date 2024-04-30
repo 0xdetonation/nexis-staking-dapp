@@ -98,28 +98,6 @@ useEffect(()=>{
       {loggedIn && !displayMnemonic && <>
     
     <ValidatorsSection validators={voteAccounts}/>
-      {voteAccounts && voteAccounts.length && <>
-        <h2>Validators : {voteAccounts.length} </h2>
-        {voteAccounts.map((va,idx)=>{
-          return (
-          <div>
-            <div style={{display:'flex'}}>
-            <b  style={{marginRight:'10px'}}>{va.votePubkey}</b> 
-            <i>Rank #{idx+1}</i>
-            </div>
-            <div>root slot: {va.rootSlot}</div>
-            <div style={{display:'flex'}}>
-              <div style={{marginRight:'10px'}}>
-              activated stake: {va.activatedStake/1e9} NZT
-              </div>
-              <div>
-              commission: {va.commission}%
-              </div>
-              </div>
-          </div>
-          )
-        })}
-      </>}
 {accountStakes && <>
   <hr />
 <h2>User Stakes : {accountStakes.totalStakeBalance/1e9} NZT</h2>
