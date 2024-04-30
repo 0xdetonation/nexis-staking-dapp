@@ -10,12 +10,15 @@ import { getLastStakedAccount } from './utils/account/getStoredAccount';
 import { withdrawStake } from './utils/delegate/withdraw';
 import { getConnection } from './utils/connection';
 import { LAMPORTS_PER_SOL, PublicKey } from '@velas/web3';
+import { logout } from './utils/account/loogout';
+import AccountCard from './components/Account/AccountCard';
+import Navbar from './components/Nav/Navbar';
 
 function App() {
   const [loggedIn,setLoggedIn]= useState(false);
   const [generatedCredentials,setGeneratatedCredentials] = useState(undefined);
   const [displayMnemonic,setDisplayMnemonic] = useState(false);
-  const [accountBalance,setAccountBalance] = useState("Loading ...");
+  const [accountBalance,setAccountBalance] = useState(undefined);
   const [voteAccounts,setVoteAccounts] = useState();
   const [accountStakes,setAccountStakes] = useState();
 
@@ -85,19 +88,17 @@ useEffect(()=>{
 
   return (
     <div>
+      <Navbar address={generatedCredentials?generatedCredentials.publicKey:undefined} balance={accountBalance?accountBalance:undefined} />
       {!loggedIn && !generatedCredentials && <button onClick={generateMnemonic}>Create Wallet</button>}
       {displayMnemonic && <>
       {generatedCredentials.mnemonic}
-      <button onClick={()=>setDisplayMnemonic(false)}>Next</button>
+      <button onClick={()=>{
+        window.location.reload();
+        setDisplayMnemonic(false)}}>Next</button>
       </>}
       {loggedIn && !displayMnemonic && <>
       <h2>Connected Account</h2>
-      <div>
-      Native Address: {generatedCredentials.publicKey}
-      </div>
-      <div>
-      Balance: {accountBalance}
-      </div>
+      
       <hr />
       {voteAccounts && voteAccounts.length && <>
         <h2>Validators : {voteAccounts.length} </h2>
@@ -155,6 +156,7 @@ useEffect(()=>{
 })}
 
       <button onClick={()=>createStakeAcc(10)}>create stake account</button>
+      <button onClick={()=>logout()}>logout</button>
       
 </>}
       </>}

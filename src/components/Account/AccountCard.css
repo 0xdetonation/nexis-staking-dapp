@@ -1,0 +1,47 @@
+.account-card{
+    display: flex;
+    align-items: center;
+    border: 4px solid var(--primary);
+    max-width: fit-content;
+    background-color:var(--primary);
+    border-radius: 0.2rem;
+}
+
+.account-card:hover{
+    border: 1px dashed var(--text-light);
+    padding: 3px;
+    cursor: pointer;
+}
+
+.account-card--address{
+    background-color: var(--primary);
+}
+
+.account-card--balance{
+background: var(--text-light);
+color: var(--bg);
+font-weight: bold;
+}
+
+.account-card--elems-common{
+    border-radius: 0.2rem;
+    padding: 6px 10px;
+}
+
+.account-card-balance--loader{
+    color: var(--bg)!important;
+}
+
+.account-card--avatar{
+    max-width: 2rem;
+    max-height: 2rem;
+    margin-right: 10px;
+    border-radius: 0.2rem;
+    border: 2px solid var(--text-light);
+}
+
+.account-card--container{
+    display: flex;
+    align-items: center;
+    width: 16rem;
+}
