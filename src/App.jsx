@@ -99,7 +99,6 @@ useEffect(()=>{
     
     <ValidatorsSection validators={voteAccounts}/>
 {accountStakes && <>
-  <hr />
 <h2>User Stakes : {accountStakes.totalStakeBalance/1e9} NZT</h2>
 {accountStakes.allStakeAccounts.map((val)=>{
   return <div>
