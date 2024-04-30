@@ -1,13 +1,12 @@
 import { PublicKey, StakeProgram, sendAndConfirmTransaction } from "@velas/web3";
-import { getLastStakedAccount, getStoredWallet } from "../account/getStoredAccount";
+import { getStoredWallet } from "../account/getStoredAccount";
 import { getConnection } from "../connection";
 
-export const stake = async(votePubkey)=>{
+export const stake = async(votePubkey,stakeAccount)=>{
     const wallet = await getStoredWallet();
-    const stakeAccount = await getLastStakedAccount();
-
+    const stakeAccountPublicKey = new PublicKey(stakeAccount);
     const delegateTx = StakeProgram.delegate({
-        stakePubkey: stakeAccount.publicKey,
+        stakePubkey: stakeAccountPublicKey,
         authorizedPubkey: wallet.publicKey,
         votePubkey: new PublicKey(votePubkey),
     });
@@ -20,7 +19,7 @@ export const stake = async(votePubkey)=>{
   );
   
   // Check in on our stake account. It should now be activating.
-  stakeStatus = await getConnection().getStakeActivation(stakeAccount.publicKey);
+  stakeStatus = await getConnection().getStakeActivation(stakeAccountPublicKey);
   console.log(`Stake account status: ${stakeStatus.state}`);
   
 }

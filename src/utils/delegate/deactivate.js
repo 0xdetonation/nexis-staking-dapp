@@ -5,7 +5,7 @@ import { getStoredWallet } from "../account/getStoredAccount";
 export const deactivate = async(stakeAccount)=>{
 const wallet = await getStoredWallet();
 const deactivateTx = StakeProgram.deactivate({
-    stakePubkey: stakeAccount.publicKey,
+    stakePubkey: new PublicKey(stakeAccount),
     authorizedPubkey:  wallet.publicKey,
   });
   const deactivateTxId = await sendAndConfirmTransaction(

@@ -40,13 +40,16 @@ export const getAccountStakes = async()=>{
     console.log(
       `Total number of stake account for ${wallet.publicKey} is: ${allStakeAccounts.length}`
     );
-    if (allStakeAccounts.length)
-      console.log(`Sample stake account:`, JSON.stringify(allStakeAccounts[12].pubkey.toString()));
     // calculating total stake amount
     for (const account of allStakeAccounts) {
       totalStakeBalance += account.account.lamports;
     }
     // total stake amount
     console.log(`Stake amount for this wallet in lamports: ${totalStakeBalance}`);
-    
+
+    return {
+      totalStakeBalance,
+      allStakeAccounts,
+      stakes:allStakeAccounts.length
+    }
 }

@@ -8,6 +8,8 @@ import { createStakeAcc } from './utils/delegate/createStakeAccount';
 import { stake } from './utils/delegate/stake';
 import { getLastStakedAccount } from './utils/account/getStoredAccount';
 import { withdrawStake } from './utils/delegate/withdraw';
+import { getConnection } from './utils/connection';
+import { LAMPORTS_PER_SOL, PublicKey } from '@velas/web3';
 
 function App() {
   const [loggedIn,setLoggedIn]= useState(false);
@@ -15,6 +17,14 @@ function App() {
   const [displayMnemonic,setDisplayMnemonic] = useState(false);
   const [accountBalance,setAccountBalance] = useState("Loading ...");
   const [voteAccounts,setVoteAccounts] = useState();
+  const [accountStakes,setAccountStakes] = useState();
+
+  if(generatedCredentials){
+    // listens to account changes through ws
+    getConnection().onAccountChange(new PublicKey(generatedCredentials.publicKey),(accountInfo,ctx)=>{
+      console.log(accountInfo)
+    },'max')
+  }
 
   // checks if user has logged in or not
   useEffect(() => {
@@ -31,6 +41,15 @@ function App() {
     };
     checkIfLoggedIn();
 }, []);
+
+useEffect(()=>{
+  const fetchAccountStakes = async()=>{
+    const _accountStakes = await getAccountStakes();
+    console.log(_accountStakes);
+    setAccountStakes(_accountStakes);
+  }
+  fetchAccountStakes()
+},[])
 
 useEffect(()=>{
   const fetchVoteAccounts = async()=>{
@@ -81,7 +100,7 @@ useEffect(()=>{
       </div>
       <hr />
       {voteAccounts && voteAccounts.length && <>
-        <h2>Validators</h2>
+        <h2>Validators : {voteAccounts.length} </h2>
         {voteAccounts.map((va,idx)=>{
           return (
           <div>
@@ -102,15 +121,42 @@ useEffect(()=>{
           )
         })}
       </>}
-      <button onClick={()=>getAccountStakes()}>getAccountStakes</button>
+{accountStakes && <>
+  <hr />
+<h2>User Stakes : {accountStakes.totalStakeBalance/1e9} NZT</h2>
+{accountStakes.allStakeAccounts.map((val)=>{
+  return <div>
+  <b>{val.pubkey.toString()}</b>
+
+  {val.account.data.parsed.type=="delegated"?
+    <div>Staked To: {val.account.data.parsed.info.stake.delegation.voter}</div>:<></>}
+
+  {val.account.data.parsed.type=="initialized"?<div style={{display:'flex'}}> 
+  <button onClick={async()=>{
+    stake("todo",val.pubkey.toString());
+  }}>Not yet delegated, Delegate Now</button>
+  </div>:<></>}
+  
+  <div style={{
+    display:'flex'
+  }}>
+  <div style={{marginRight:'10px'}}>Delegated: {val.account.lamports/1e9} NZT</div>
+  <div style={{marginRight:'10px'}}>Rent Epoch: {val.account.rentEpoch.toString()}</div>
+  <button  onClick={async()=>{
+  if(val.account.data.parsed.type=="delegated"){
+    deactivate(val.pubkey.toString())
+  }
+        withdrawStake(val.pubkey.toString())}
+        }>withdraw</button>
+  </div>
+  
+  <br/>
+  </div>
+})}
+
       <button onClick={()=>createStakeAcc(10)}>create stake account</button>
-      <button onClick={()=>stake("J8zxxzkYFiRevK5hYnR8NTPeBG8WV21Eze5wNDRrzjY2")}>stake</button>
-      <button onClick={async()=>{
-        const stakeAccount = await getLastStakedAccount();
-        deactivate(stakeAccount)}}>deactivate</button>
-      <button onClick={async()=>{
-        const stakeAccount = await getLastStakedAccount();
-        withdrawStake(stakeAccount)}}>withdrawStake</button>
+      
+</>}
       </>}
     </div>
   )
