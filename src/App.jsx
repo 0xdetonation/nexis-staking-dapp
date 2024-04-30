@@ -6,13 +6,12 @@ import { getVoteAccounts } from './utils/getVoteAccounts';
 import { deactivate } from './utils/delegate/deactivate';
 import { createStakeAcc } from './utils/delegate/createStakeAccount';
 import { stake } from './utils/delegate/stake';
-import { getLastStakedAccount } from './utils/account/getStoredAccount';
 import { withdrawStake } from './utils/delegate/withdraw';
 import { getConnection } from './utils/connection';
-import { LAMPORTS_PER_SOL, PublicKey } from '@velas/web3';
+import { PublicKey } from '@velas/web3';
 import { logout } from './utils/account/loogout';
-import AccountCard from './components/Account/AccountCard';
 import Navbar from './components/Nav/Navbar';
+import ValidatorsSection from './components/Sections/Validators/ValidatorsSection';
 
 function App() {
   const [loggedIn,setLoggedIn]= useState(false);
@@ -97,9 +96,8 @@ useEffect(()=>{
         setDisplayMnemonic(false)}}>Next</button>
       </>}
       {loggedIn && !displayMnemonic && <>
-      <h2>Connected Account</h2>
-      
-      <hr />
+    
+    <ValidatorsSection validators={voteAccounts}/>
       {voteAccounts && voteAccounts.length && <>
         <h2>Validators : {voteAccounts.length} </h2>
         {voteAccounts.map((va,idx)=>{
