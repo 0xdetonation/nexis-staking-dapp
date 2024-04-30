@@ -12,6 +12,7 @@ import { PublicKey } from '@velas/web3';
 import { logout } from './utils/account/loogout';
 import Navbar from './components/Nav/Navbar';
 import ValidatorsSection from './components/Sections/Validators/ValidatorsSection';
+import UserStakesSection from './components/Sections/Stakes/UserStakesSection';
 
 function App() {
   const [loggedIn,setLoggedIn]= useState(false);
@@ -96,47 +97,46 @@ useEffect(()=>{
         setDisplayMnemonic(false)}}>Next</button>
       </>}
       {loggedIn && !displayMnemonic && <>
-    
-    <ValidatorsSection validators={voteAccounts}/>
-{accountStakes && <>
-<h2>User Stakes : {accountStakes.totalStakeBalance/1e9} NZT</h2>
-{accountStakes.allStakeAccounts.map((val)=>{
-  return <div>
-  <b>{val.pubkey.toString()}</b>
+        <UserStakesSection accountStakes={accountStakes} />
+        <ValidatorsSection validators={voteAccounts} />
+        {accountStakes && <>
+          <h2>User Stakes : {accountStakes.totalStakeBalance/1e9} NZT</h2>
+          {accountStakes.allStakeAccounts.map((val)=>{
+            return <div>
+              <b>{val.pubkey.toString()}</b>
 
-  {val.account.data.parsed.type=="delegated"?
-    <div>Staked To: {val.account.data.parsed.info.stake.delegation.voter}</div>:<></>}
+              {val.account.data.parsed.type=="delegated"?
+                <div>Staked To: {val.account.data.parsed.info.stake.delegation.voter}</div>:<></>}
 
-  {val.account.data.parsed.type=="initialized"?<div style={{display:'flex'}}> 
-  <button onClick={async()=>{
-    stake("todo",val.pubkey.toString());
-  }}>Not yet delegated, Delegate Now</button>
-  </div>:<></>}
-  
-  <div style={{
-    display:'flex'
-  }}>
-  <div style={{marginRight:'10px'}}>Delegated: {val.account.lamports/1e9} NZT</div>
-  <div style={{marginRight:'10px'}}>Rent Epoch: {val.account.rentEpoch.toString()}</div>
-  <button  onClick={async()=>{
-  if(val.account.data.parsed.type=="delegated"){
-    deactivate(val.pubkey.toString())
-  }
-        withdrawStake(val.pubkey.toString())}
-        }>withdraw</button>
-  </div>
-  
-  <br/>
-  </div>
-})}
+              {val.account.data.parsed.type=="initialized"?<div style={{display:'flex'}}> 
+                <button onClick={async()=>{
+                  stake("todo",val.pubkey.toString());
+                }}>Not yet delegated, Delegate Now</button>
+              </div>:<></>}
+              
+              <div style={{
+                display:'flex'
+              }}>
+                <div style={{marginRight:'10px'}}>Delegated: {val.account.lamports/1e9} NZT</div>
+                <div style={{marginRight:'10px'}}>Rent Epoch: {val.account.rentEpoch.toString()}</div>
+                <button  onClick={async()=>{
+                  if(val.account.data.parsed.type=="delegated"){
+                    deactivate(val.pubkey.toString())
+                  }
+                  withdrawStake(val.pubkey.toString())}
+                }>withdraw</button>
+              </div>
+              
+              <br/>
+            </div>
+          })}
 
-      <button onClick={()=>createStakeAcc(10)}>create stake account</button>
-      <button onClick={()=>logout()}>logout</button>
-      
-</>}
+          <button onClick={()=>createStakeAcc(10)}>create stake account</button>
+          <button onClick={()=>logout()}>logout</button>
+        </>}
       </>}
     </div>
   )
 }
 
-export default App
+export default App;

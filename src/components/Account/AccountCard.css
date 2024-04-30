@@ -43,5 +43,6 @@ font-weight: bold;
 .account-card--container{
     display: flex;
     align-items: center;
-    width: 16rem;
+    width: 40rem;
+    justify-content: flex-end;
 }

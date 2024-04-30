@@ -1,6 +1,6 @@
 import React from 'react';
 import ValidatorCard from './ValidatorCard'
-import { CircularProgress, Typography, Badge } from '@mui/material';
+import { Typography, Badge } from '@mui/material';
 
 function ValidatorsSection(props) {
   return (
