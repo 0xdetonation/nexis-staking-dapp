@@ -10,7 +10,8 @@ function Navbar(props) {
         <img src={logo} alt="" />
       </div>
       <div className="navbar-right">
-        <AccountCard address={props.address} balance={props.balance}/>
+        {props.address && <AccountCard address={props.address} balance={props.balance}/>}
+
       </div>
     </div>
 
