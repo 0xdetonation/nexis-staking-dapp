@@ -2,11 +2,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
   }
   
   .navbar-left {
     flex: 1;
+    padding: 10px;
   }
   
   .navbar-right {
