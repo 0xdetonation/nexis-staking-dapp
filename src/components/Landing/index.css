@@ -1,0 +1,20 @@
+.video-player{
+    border-radius: 30px;
+}
+
+.video-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing{
+    background-color: #000000;
+}
+
+.connect-btn{
+   position: absolute;
+   top: 50vh;
+   left: 44vw;
+   width: 8vw;
+}

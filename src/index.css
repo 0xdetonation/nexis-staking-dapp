@@ -12,3 +12,10 @@ body{
     color: var(--text-light);
     font-family: "Inter", sans-serif;
 }
+
+.btn-connect{
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+}

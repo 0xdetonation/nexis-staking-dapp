@@ -10,6 +10,7 @@ import ValidatorsSection from './components/Sections/Validators/ValidatorsSectio
 import UserStakesSection from './components/Sections/Stakes/UserStakesSection';
 import PermanentDrawerLeft from './components/Drawer/Drawer';
 import { ValidatorContext } from './context/ValidatorContext';
+import Landing from './components/Landing/Landing';
 
 function App() {
   const [loggedIn,setLoggedIn]= useState(false);
@@ -86,7 +87,7 @@ useEffect(()=>{
   return (
     <ValidatorContext.Provider value={voteAccounts}>
     <div>
-      {!loggedIn && !generatedCredentials && <button onClick={generateMnemonic}>Create Wallet</button>}
+      {!loggedIn && !generatedCredentials && <Landing connectBtn={<button className='btn-connect' onClick={generateMnemonic}>Create Wallet</button>}/>}
       {displayMnemonic && <>
       {generatedCredentials.mnemonic}
       <button onClick={()=>{
