@@ -8,6 +8,8 @@ import { withdrawStake } from '../../../utils/delegate/withdraw';
 import { deactivate } from '../../../utils/delegate/deactivate';
 import { stake } from '../../../utils/delegate/stake';
 import { ValidatorContext } from '../../../context/ValidatorContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function UserCard(props) {
   const voteAccounts = useContext(ValidatorContext);
@@ -66,7 +68,7 @@ export default function UserCard(props) {
                     <Button onClick={() => {
                       handleCloseModal();
                       console.log(selectedVotePubkey)
-                      stake(selectedVotePubkey, props.val.pubkey.toString());
+                      stake(selectedVotePubkey, props.val.pubkey.toString(),toast);
                     }}>Delegate</Button>
                   </DialogActions>
                 </Dialog>
@@ -81,7 +83,7 @@ export default function UserCard(props) {
                 if(props.val.account.data.parsed.type==="delegated"){
                   deactivate(props.val.pubkey.toString())
                 }
-                withdrawStake(props.val.pubkey.toString())}
+                withdrawStake(props.val.pubkey.toString(),toast)}
               }
             >
               Withdraw
@@ -97,6 +99,7 @@ export default function UserCard(props) {
           </div>
         </CardContent>
       </Card>
+      <ToastContainer />
     </div>
   );
 }

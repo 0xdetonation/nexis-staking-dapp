@@ -3,13 +3,8 @@ import { createAccount } from './utils/create'
 import { getAccountStakes, getBalance } from './utils/account/info';
 import { NEXIS_LOGGED_IN_MNEMONIC } from './utils/lsIdents';
 import { getVoteAccounts } from './utils/getVoteAccounts';
-import { deactivate } from './utils/delegate/deactivate';
-import { createStakeAcc } from './utils/delegate/createStakeAccount';
-import { stake } from './utils/delegate/stake';
-import { withdrawStake } from './utils/delegate/withdraw';
 import { getConnection } from './utils/connection';
 import { PublicKey } from '@velas/web3';
-import { logout } from './utils/account/loogout';
 import Navbar from './components/Nav/Navbar';
 import ValidatorsSection from './components/Sections/Validators/ValidatorsSection';
 import UserStakesSection from './components/Sections/Stakes/UserStakesSection';
