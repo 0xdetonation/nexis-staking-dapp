@@ -1,48 +1,74 @@
-import {
-    Drawer,
-    DrawerBody,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
-    useDisclosure,
-  } from '@chakra-ui/react'
-import { Button, Input } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import logo from "../../assets/nexis.svg"
 
- export function CustomDrawer() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const btnRef = React.useRef()
-  
-    return (
-      <>
-        <Button ref={btnRef} colorScheme='teal' onClick={onOpen}>
-          Open
-        </Button>
+const drawerWidth = 240;
+
+export default function PermanentDrawerLeft(props) {
+  const [selectedTab, setSelectedTab] = useState('Your Stakes');
+
+  const handleTabClick = (tabName) => {
+    setSelectedTab(tabName);
+  };
+
+  return (
+    <>
+      {props.navbar}
+      <Box sx={{ display: 'flex' }}>
         <Drawer
-          isOpen={isOpen}
-          placement='right'
-          onClose={onClose}
-          finalFocusRef={btnRef}
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+              bgcolor: 'black',
+              color:'white'
+            },
+          }}
+          variant="permanent"
+          anchor="left"
         >
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader>Create your account</DrawerHeader>
-  
-            <DrawerBody>
-              <Input placeholder='Type here...' />
-            </DrawerBody>
-  
-            <DrawerFooter>
-              <Button variant='outline' mr={3} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme='blue'>Save</Button>
-            </DrawerFooter>
-          </DrawerContent>
+          <div style={{
+            padding:'18px'
+          }}>
+            <img src={logo} alt="" />
+          </div>
+          <Divider sx={{ bgcolor: 'white' }}/>
+          <List>
+            {['Your Stakes', 'Validators'].map((text, index) => (
+              <ListItem
+                button
+                key={text}
+                onClick={() => handleTabClick(text)}
+                selected={selectedTab === text}
+                sx={{
+                    '&:hover': {
+                      '& .MuiListItemText-primary': {
+                        color: 'var(--primary)',
+                      },
+                    },
+                  }}
+              >
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
         </Drawer>
-      </>
-    )
-  }
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: '#171717', p: 3 }}
+        >
+          {selectedTab === 'Your Stakes' && props.userStakes}
+          {selectedTab === 'Validators' && props.validators}
+        </Box>
+      </Box>
+    </>
+  );
+}

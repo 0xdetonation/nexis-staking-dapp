@@ -13,6 +13,7 @@ import { logout } from './utils/account/loogout';
 import Navbar from './components/Nav/Navbar';
 import ValidatorsSection from './components/Sections/Validators/ValidatorsSection';
 import UserStakesSection from './components/Sections/Stakes/UserStakesSection';
+import PermanentDrawerLeft from './components/Drawer/Drawer';
 
 function App() {
   const [loggedIn,setLoggedIn]= useState(false);
@@ -88,7 +89,6 @@ useEffect(()=>{
 
   return (
     <div>
-      <Navbar address={generatedCredentials?generatedCredentials.publicKey:undefined} balance={accountBalance?accountBalance:undefined} />
       {!loggedIn && !generatedCredentials && <button onClick={generateMnemonic}>Create Wallet</button>}
       {displayMnemonic && <>
       {generatedCredentials.mnemonic}
@@ -97,8 +97,9 @@ useEffect(()=>{
         setDisplayMnemonic(false)}}>Next</button>
       </>}
       {loggedIn && !displayMnemonic && <>
-        <UserStakesSection accountStakes={accountStakes} />
-        <ValidatorsSection validators={voteAccounts} />
+      <PermanentDrawerLeft navbar={<Navbar address={generatedCredentials?generatedCredentials.publicKey:undefined} balance={accountBalance?accountBalance:undefined} />} userStakes={<UserStakesSection accountStakes={accountStakes} />} validators={ <ValidatorsSection validators={voteAccounts} />}/>
+        
+       
         {accountStakes && <>
           <h2>User Stakes : {accountStakes.totalStakeBalance/1e9} NZT</h2>
           {accountStakes.allStakeAccounts.map((val)=>{
