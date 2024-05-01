@@ -14,6 +14,7 @@ import Navbar from './components/Nav/Navbar';
 import ValidatorsSection from './components/Sections/Validators/ValidatorsSection';
 import UserStakesSection from './components/Sections/Stakes/UserStakesSection';
 import PermanentDrawerLeft from './components/Drawer/Drawer';
+import { ValidatorContext } from './context/ValidatorContext';
 
 function App() {
   const [loggedIn,setLoggedIn]= useState(false);
@@ -88,19 +89,21 @@ useEffect(()=>{
   },[loggedIn])
 
   return (
+    <ValidatorContext.Provider value={voteAccounts}>
     <div>
       {!loggedIn && !generatedCredentials && <button onClick={generateMnemonic}>Create Wallet</button>}
       {displayMnemonic && <>
       {generatedCredentials.mnemonic}
       <button onClick={()=>{
+        setDisplayMnemonic(false)
         window.location.reload();
-        setDisplayMnemonic(false)}}>Next</button>
+        }}>Next</button>
       </>}
       {loggedIn && !displayMnemonic && <>
       <PermanentDrawerLeft navbar={<Navbar address={generatedCredentials?generatedCredentials.publicKey:undefined} balance={accountBalance?accountBalance:undefined} />} userStakes={<UserStakesSection accountStakes={accountStakes} />} validators={ <ValidatorsSection validators={voteAccounts} />}/>
-        
       </>}
     </div>
+    </ValidatorContext.Provider>
   )
 }
 
