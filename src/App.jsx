@@ -115,19 +115,6 @@ useEffect(()=>{
                 }}>Not yet delegated, Delegate Now</button>
               </div>:<></>}
               
-              <div style={{
-                display:'flex'
-              }}>
-                <div style={{marginRight:'10px'}}>Delegated: {val.account.lamports/1e9} NZT</div>
-                <div style={{marginRight:'10px'}}>Rent Epoch: {val.account.rentEpoch.toString()}</div>
-                <button  onClick={async()=>{
-                  if(val.account.data.parsed.type=="delegated"){
-                    deactivate(val.pubkey.toString())
-                  }
-                  withdrawStake(val.pubkey.toString())}
-                }>withdraw</button>
-              </div>
-              
               <br/>
             </div>
           })}
