@@ -6,7 +6,7 @@ function ValidatorsSection(props) {
   return (
     <>
     {props.validators?
-    <div style={{ position: 'absolute', right: 0, top: '4rem', zIndex: '9999', height: '80vh' }}>
+    <div >
       <Typography sx={{ fontSize: 26, fontWeight: '400', color: 'var(--text-light)' }} color="text.secondary" gutterBottom>
         Validators <Badge badgeContent={props.validators ? props.validators.length : 0} color="primary" style={{ marginLeft: '10px' }} />
       </Typography>

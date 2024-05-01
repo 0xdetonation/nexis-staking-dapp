@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 
 function UserStakesSection(props) {
   return (
-    <div style={{ position:'relative',top:'0.5rem',height: '80vh' }}>
+    <div >
       <Typography sx={{ fontSize: 26, fontWeight: '400', color: 'var(--text-light)' }} color="text.secondary" gutterBottom>
         User Stakes
       </Typography>
