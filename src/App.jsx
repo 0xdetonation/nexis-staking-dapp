@@ -99,29 +99,6 @@ useEffect(()=>{
       {loggedIn && !displayMnemonic && <>
       <PermanentDrawerLeft navbar={<Navbar address={generatedCredentials?generatedCredentials.publicKey:undefined} balance={accountBalance?accountBalance:undefined} />} userStakes={<UserStakesSection accountStakes={accountStakes} />} validators={ <ValidatorsSection validators={voteAccounts} />}/>
         
-       
-        {accountStakes && <>
-          <h2>User Stakes : {accountStakes.totalStakeBalance/1e9} NZT</h2>
-          {accountStakes.allStakeAccounts.map((val)=>{
-            return <div>
-              <b>{val.pubkey.toString()}</b>
-
-              {val.account.data.parsed.type=="delegated"?
-                <div>Staked To: {val.account.data.parsed.info.stake.delegation.voter}</div>:<></>}
-
-              {val.account.data.parsed.type=="initialized"?<div style={{display:'flex'}}> 
-                <button onClick={async()=>{
-                  stake("todo",val.pubkey.toString());
-                }}>Not yet delegated, Delegate Now</button>
-              </div>:<></>}
-              
-              <br/>
-            </div>
-          })}
-
-          <button onClick={()=>createStakeAcc(10)}>create stake account</button>
-          <button onClick={()=>logout()}>logout</button>
-        </>}
       </>}
     </div>
   )

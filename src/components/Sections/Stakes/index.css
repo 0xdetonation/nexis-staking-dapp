@@ -1,0 +1,29 @@
+.userStakesCard{
+    margin-bottom: 10px;
+}
+
+.userStakesCard:hover{
+    border: 2px dashed rgba(255, 255, 255, 0.511);
+    cursor: pointer;
+}
+
+.create-stake{
+    margin-top: 20px;
+    padding: 20px;
+    background-color: transparent;
+    border: 2px dashed var(--primary);
+    border-radius: 8px;
+    width: 100%;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.586);
+}
+
+.create-stake:hover{
+    background-color: var(--primary);
+    color: white;
+    cursor: pointer;
+}
+
+.user-stakes-section{
+    max-width: fit-content;
+}

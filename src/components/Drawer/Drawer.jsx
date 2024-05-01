@@ -6,6 +6,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import logo from "../../assets/nexis.svg"
+import { logout } from '../../utils/account/loogout';
+import { Button } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -19,6 +21,14 @@ export default function PermanentDrawerLeft(props) {
   return (
     <>
       {props.navbar}
+      <Button
+        variant='outlined'
+        color='error'
+      style={{
+        position:'absolute',
+        bottom:'10px',
+        right:'10px'
+      }} onClick={()=>logout()}>Logout</Button>
       <Box sx={{ display: 'flex' }}>
         <Drawer
           sx={{
@@ -67,6 +77,7 @@ export default function PermanentDrawerLeft(props) {
         >
           {selectedTab === 'Your Stakes' && props.userStakes}
           {selectedTab === 'Validators' && props.validators}
+          
         </Box>
       </Box>
     </>

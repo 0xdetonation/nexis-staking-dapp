@@ -3,10 +3,15 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Button, Chip } from '@mui/material';
+import "./index.css"
+import { withdrawStake } from '../../../utils/delegate/withdraw';
+import { deactivate } from '../../../utils/delegate/deactivate';
+import { stake } from '../../../utils/delegate/stake';
 
 export default function UserCard(props) {
   return (
-    <Card sx={{ maxWidth: 'fit-content', background: 'var(--bg-light)', position: 'relative' }}>
+    <div className='userStakesCard'>
+    <Card sx={{ minWidth: 'fit-content', background: 'var(--bg-light)', position: 'relative' }}>
       <CardContent>
         <br />
         <Typography sx={{ fontSize: 18, fontWeight: 'bold', color: 'var(--primary)' }} color="text.secondary" gutterBottom>
@@ -26,10 +31,10 @@ export default function UserCard(props) {
               color="success" sx={{
                   marginBottom:'14px'
               }} onClick={async()=>{
-                  if(val.account.data.parsed.type=="delegated"){
-                    deactivate(val.pubkey.toString())
+                  if(props.val.account.data.parsed.type=="delegated"){
+                    deactivate(props.val.pubkey.toString())
                   }
-                  withdrawStake(val.pubkey.toString())}
+                  withdrawStake(props.val.pubkey.toString())}
                 }>Withdraw</Button>
         </div>
         <div style={{
@@ -44,5 +49,6 @@ export default function UserCard(props) {
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 }
