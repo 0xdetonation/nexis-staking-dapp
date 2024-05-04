@@ -20,13 +20,6 @@ function App() {
   const [voteAccounts,setVoteAccounts] = useState();
   const [accountStakes,setAccountStakes] = useState();
 
-  if(generatedCredentials){
-    // listens to account changes through ws
-    getConnection().onAccountChange(new PublicKey(generatedCredentials.publicKey),(accountInfo,ctx)=>{
-      console.log(accountInfo)
-    },'max')
-  }
-
   // checks if user has logged in or not
   useEffect(() => {
     const checkIfLoggedIn = async () => {
