@@ -21,7 +21,7 @@
     "buffer": "^6.0.3",
     "chai": "^4.3.4",
     "ed25519-hd-key": "^1.2.0",
-    "mochawesome": "^6.2.2",
+    "mochawesome": "^7.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-toastify": "^10.0.5",
